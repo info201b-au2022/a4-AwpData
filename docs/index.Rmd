@@ -1,0 +1,45 @@
+---
+title: "Your A4 Report Title (TODO: Revise title)"
+author: "Your Name"
+date: '2022-11-01'
+output: html_document
+---
+
+```{r echo=FALSE, eval=TRUE, message=FALSE}
+source("../source/a4-helpers.R")
+source("../source/analysis.R")
+```
+
+## Abstract 
+[TODO: Include a short abstract (about 50 words)]
+
+# Test (TODO: Remove before submission!!)
+```{r echo=FALSE}
+q1_string <- test_query1()
+num <- 5
+```
+As you know, this is a markdown report. The [R Markdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) is **useful!**
+
+* Here's a test of a dynamic variable. Say **"`r q1_string`!!!** 
+* Here's another test. A vector
+of numbers: `r test_query2(num)`.
+
+Recall that _{r echo=TRUE}_ can be used to display the code, 
+which is very useful when developing and debugging a report. Here's an example: 
+
+```{r echo=TRUE}
+num <- 5
+sum <- sum(test_query2(num))
+print(sum)
+```
+
+## Introduction 
+[TODO]
+
+## Data Summary 
+[TODO]
+
+[TODO ... other sections ... See Canvas for details]
+
+_All the very best with your work!_
+
