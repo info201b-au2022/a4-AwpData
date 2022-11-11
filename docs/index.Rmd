@@ -1,6 +1,6 @@
 ---
-title: "Your A4 Report Title (TODO: Revise title)"
-author: "Your Name"
+title: "Incarceration Trends [RENAME]"
+author: "Trevor Tang"
 date: '2022-11-01'
 output: html_document
 ---
@@ -13,33 +13,46 @@ source("../source/analysis.R")
 ## Abstract 
 [TODO: Include a short abstract (about 50 words)]
 
-# Test (TODO: Remove before submission!!)
-```{r echo=FALSE}
-q1_string <- test_query1()
-num <- 5
-```
-As you know, this is a markdown report. The [R Markdown Cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) is **useful!**
-
-* Here's a test of a dynamic variable. Say **"`r q1_string`!!!** 
-* Here's another test. A vector
-of numbers: `r test_query2(num)`.
-
-Recall that _{r echo=TRUE}_ can be used to display the code, 
-which is very useful when developing and debugging a report. Here's an example: 
-
-```{r echo=TRUE}
-num <- 5
-sum <- sum(test_query2(num))
-print(sum)
-```
-
 ## Introduction 
-[TODO]
+The social issues related to incarcerating trends which this dataset and Vera
+wants to tackle are those of mass incarceration. Thus, the data provided showcases
+the rates and prison populations of people from the binary genders, and of a spectrum
+of races. Analyzing this dataset might help decriminalize races that might
+be disproportionally large in the prison system. Many sentences might also be
+given for minor offenses. Vera wants to show that those of color, in poverty,
+and our unjust prosecution system result in racial disparities in policing and
+sentencing.
+
+The direct stakeholders are the U.S. Justice system and their corresponding 
+departments and employees as they will be able to visualize the trends of who
+is being incarcerated (perhaps unjustly) into the prison system. Some central 
+values that will be engaged by these people are fairness, human dignity, and
+justice. An indirect stakeholder might be communities that are currently facing
+overpolicing. Vera indicates that many prisoners are those police tend to target
+more such as the homeless, people with mental illnesses, substance users, or
+people of color. As such justice, privacy, and security will come to these 
+people as well.
+
+Some questions I want to answer in my report are as follows: <br>
+- 1. What is the proportion does each race make up the prison population?
+
 
 ## Data Summary 
 [TODO]
 
-[TODO ... other sections ... See Canvas for details]
+## Growth of U.S. Prison Population
+```{r, echo = FALSE, fig.align = "center", fig.width = 10}
+plot_jail_pop_for_us()
+```
+_Figure 1_: Increase of Jail Population in U.S. (1970 - 2018). This chart shows over time the population of jails has been increasing at a rather steady rate and then seeming to decline from 2008 onwards.
 
-_All the very best with your work!_
+A key pattern in this graph is that while the jail population has been growing steadily, it had been declining since 2008. It might be that laws have been passed that created a more equitable justice system, or that prison reformation has resulted in prisoners being released more than they are being admitted. 
 
+## Growth of Prison Population By State
+
+```{r, echo = FALSE, fig.align = "center", fig.width = 10}
+plot_jail_pop_by_states(c("CA", "NY", "TX", "FL", "GA", "WA"))
+```
+_Figure 2_: Increase of Jail Population of Certain States in the U.S. (1970 - 2018). States were chosen by most populous, and then Washington was included for comparison (and because this is for INFO 201 at the University of Washington). It is similar to Figure 1, but instead of having jail populations of the nation over time it is of a respective state instead.
+
+A key pattern identified in this graph is how California has the highest jail population rate while Washington has the lowest. This might be because California is the most populated state or in general has more criminal activity. Another pattern is that all of these states have declining population rates around 2010. This is similar to _figure 1_ and might be based off the results of better prison reformation. 

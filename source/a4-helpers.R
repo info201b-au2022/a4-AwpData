@@ -6,7 +6,7 @@ library(tidyverse)
 # Note: The CSV file is stored on my local machine to speed load times
 #---------------------------------------------------------------------------#
 get_data <- function(num_records=-1) {
-  fname <- "~/Documents/info201/data/incarceration_trends.csv"
+  fname <- "../data/incarceration_trends.csv"
   df <- read.csv(fname, nrows=num_records)
   return(df)
 }
@@ -39,7 +39,7 @@ divisions_in_region <- function(p_region) {
 }
 
 #----------------------------------------------------------------------------#
-# Return the list of states in a region.  The divisions are: 
+# Return the list of states in a division. The divisions are: 
 #    East North Central
 #    East South Central
 #    Middle Atlantic
@@ -66,12 +66,7 @@ is_state <- function(p_place) {
     filter(state == p_place) %>%
     distinct(state) %>%
     pull(state)
-  if (length(the_states > 0)) {
-    return(TRUE)
-  }
-  else {
-    return(FALSE)
-  }
+  return(length(the_states) > 0)
 }
 
 #----------------------------------------------------------------------------#
