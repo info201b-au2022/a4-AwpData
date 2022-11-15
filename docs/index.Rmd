@@ -33,9 +33,9 @@ more such as the homeless, people with mental illnesses, substance users, or
 people of color. As such justice, privacy, and security will come to these 
 people as well.
 
-Some questions I want to answer in my report are as follows: <br>
-- 1. What is the proportion does each race make up the prison population?
-
+Some questions answered in this report are as follows: <br>
+- 1. How has the U.S. jail population changed from 1978 - 2018 and why?
+- 2. How has the U.S. Jail population changed in the most populous states (CA, NV, FL, NY) and how does this compare with Washington? What might 
 
 ## Data Summary 
 [TODO]
@@ -56,3 +56,11 @@ plot_jail_pop_by_states(c("CA", "NY", "TX", "FL", "GA", "WA"))
 _Figure 2_: Increase of Jail Population of Certain States in the U.S. (1970 - 2018). States were chosen by most populous, and then Washington was included for comparison (and because this is for INFO 201 at the University of Washington). It is similar to Figure 1, but instead of having jail populations of the nation over time it is of a respective state instead.
 
 A key pattern identified in this graph is how California has the highest jail population rate while Washington has the lowest. This might be because California is the most populated state or in general has more criminal activity. Another pattern is that all of these states have declining population rates around 2010. This is similar to _figure 1_ and might be based off the results of better prison reformation. 
+
+## Ratio of Black Jail Populations to White Jail Populations
+```{r, echo = FALSE, messages = FALSE, fig.width = 20, fig.height = 10}
+create_inequality_map()
+```
+_Figure 6_: Comparing the ratio of black jail populations to white jail populations per county in the Southern U.S. For example, a ratio of _6_ indicates that there are 6 black prisoners per every 1 white prisoner. This part of the United States was chosen since it contained ratios that were much greater than other parts of the United States.
+
+On closer observation, this map reveals a potential inequality such that black people seem to be put in prison more than white people. For instance, the greatest ratio can be found in ...

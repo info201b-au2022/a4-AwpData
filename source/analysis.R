@@ -1,4 +1,6 @@
 library(tidyverse)
+library(plotly)
+library(maps) # Used in section 6 to match county names for mapping
 
 # The functions might be useful for A4
 source("../source/a4-helpers.R")
@@ -24,7 +26,8 @@ get_year_jail_pop <- function() {
     # Get the sum of all the jail populations across each state (for a year)
     summarize(total_jail_pop_this_year = sum(total_jail_pop, na.rm = TRUE)) %>% 
     # Select only the year (x variable) and the total jail population (y variable)
-    select(year, total_jail_pop_this_year)
+    select(year, total_jail_pop_this_year) %>% 
+    rename("Year" = year, "Total U.S. Jail Population" = total_jail_pop_this_year)
   return(year_jail_pop)   
 } 
 
@@ -33,8 +36,8 @@ get_year_jail_pop <- function() {
 plot_jail_pop_for_us <- function()  {
   # Create a ggplot with the function above as the dataset and x and y variables
   # being the year and total jail population
-  plot <- ggplot(get_year_jail_pop(), aes(x = year, y = total_jail_pop_this_year)) +
-    # Make it a bar graph
+  plot <- ggplot(get_year_jail_pop(), aes(x = Year, y = `Total U.S. Jail Population`)) +
+    # Make it a bar graph (label used for plotly hover info)
     geom_col() +
     # Scale the y so that the labels show comma notation instead of scientific
     scale_y_continuous(labels = scales::comma) +
@@ -42,17 +45,17 @@ plot_jail_pop_for_us <- function()  {
     labs(
     x = "Year",
     y = "Total Jail Population",
-    title = "Increase of Jail Population in U.S. (1970 - 1978)",
+    title = "Increase of Jail Population in U.S. (1970 - 2018)",
     caption = "Source: Vera Institute"
   )
+  plot <- ggplotly(plot)
   return(plot)   
 } 
 
 ## Section 4  ---- 
 #----------------------------------------------------------------------------#
 # Growth of Prison Population by State 
-# Your functions might go here ... <todo:  update comment>
-# See Canvas
+# Functions to produce line graph of jail population in different states
 #----------------------------------------------------------------------------#
 get_jail_pop_by_states <- function(states) {
   if (length(states) > 10 || length(states) < 3) {
@@ -86,7 +89,6 @@ plot_jail_pop_by_states <- function(states) {
         caption = "Source: Vera Institute",
         color = "States"
       )
-    
     return(plot)
   }
 }
@@ -106,6 +108,82 @@ plot_jail_pop_by_states <- function(states) {
 # See Canvas
 #----------------------------------------------------------------------------#
 
-## Load data frame ---- 
+# The county names in the incarceration dataset are not formatted the same as
+# the ones that map_data("county") uses, so I will use a county dataset provided
+# by maps package and then later join this with the incarceration dataset which
+# makes it easier to map
+county_lookup <- tibble(county.fips) %>% 
+  # I will later join the map_data("county") by its fips code, but I must separate
+  # the state and county into their own columns using tidyr
+  separate(polyname, into = c("State", "county"), sep = ",")
+
+# get_data used to wrangle our dataset for graphing below
+get_data <- function() {
+  data <- incarceration_df %>% 
+    filter(year == 2018) %>%  # Only the most recent year allowed
+    filter(region == "South") %>%  # Only southern United States
+    # Have to join on county_lookup to make county name the same as county map data
+    inner_join(county_lookup, by = c("fips" = "fips")) %>%
+    select(fips, county, State, region, black_jail_pop, white_jail_pop) %>% 
+    filter(is.na(black_jail_pop) == FALSE) %>% # Exclude where we don't have black pop
+    filter(is.na(white_jail_pop) == FALSE) %>% # Exclude where we don't have white pop
+    mutate(black_to_white_ratio = black_jail_pop / white_jail_pop) %>%  # Ratio calculation
+    filter(is.nan(black_to_white_ratio) == FALSE) # Remove missing calculations
+}
+
+# Function used to create the map to show an inequality
+create_inequality_map <- function() {
+  
+  # Get the county map_data only including counties from regions we want
+  county_shape <- map_data("county") %>% 
+    rename("county" = "subregion") %>% 
+    inner_join(get_data(), by = c("county" = "county", "region" = "State"))
+  
+  # Get the state map_data so that we can create the state outlines but filter
+  # it so that it only contains state outlines from the desired region
+  state_shape <- map_data("state") %>%
+    inner_join(get_data(), by = c("region" = "State"))
+  
+  plot <- ggplot(county_shape) +
+    geom_polygon( # Key element that fills in each county with gradient color
+      mapping = aes(x = long, y = lat, group = group, fill = black_to_white_ratio),
+      color = "black",
+      linewidth = 0.3
+    ) +
+    geom_polygon( # Element used to outline the borders of each state
+      data = state_shape,
+      mapping = aes(x = long, y = lat, group = group),
+      fill = NA,
+      color = "black",
+      linewidth = 1
+    ) +
+    scale_fill_gradientn( # Scaling the fill with red hue instead of blue
+      colors = c("#FFF7EC", "#FEE8C8", "#FDD49E", "#FDBB84", "#FC8D59", "#EF6548",
+                 "#D7301F", "#B30000", "#7F0000"),
+      # Rescale the colors so it more closely matches the calculated results
+      values = scales::rescale(c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 
+                                 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20,
+                                 30, 40, 50, 60, 100))
+    ) +
+    coord_quickmap() +
+    labs(
+      title = "2018, Black to White Jail Population Ratio Per County; Southern U.S.",
+      subtitle = "Calculated by taking black jail population and dividing it by white jail population for each county",
+      fill = "Black to White Ratio",
+      caption = "Source: Vera Institute"
+    ) +
+    theme_void() + # Removes all axis, backgrounds, tick marks, and grid lines.
+    theme(
+      plot.title = element_text(size = 36),
+      plot.subtitle = element_text(size = 24),
+      plot.caption = element_text(size = 24),
+      legend.position = c(0.55, 0.15), # Change legend position
+      legend.direction = "horizontal", # Make it horizontal
+      legend.margin = margin(0.2, 0.2, 0.2, 0.2, "cm"), # Add a margin around it
+      legend.background = element_rect(fill = "#C6C6C6") # Set the background color for the legend
+      
+    )
+  return(plot)
+}
 
 
