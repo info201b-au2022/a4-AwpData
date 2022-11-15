@@ -125,8 +125,8 @@ get_data <- function() {
     # Have to join on county_lookup to make county name the same as county map data
     inner_join(county_lookup, by = c("fips" = "fips")) %>%
     select(fips, county, State, region, black_jail_pop, white_jail_pop) %>% 
-    filter(is.na(black_jail_pop) == FALSE) %>% # Exclude where we don't have black pop
-    filter(is.na(white_jail_pop) == FALSE) %>% # Exclude where we don't have white pop
+    mutate(black_jail_pop = ifelse(is.na(black_jail_pop), 0, black_jail_pop)) %>% 
+    mutate(white_jail_pop = ifelse(is.na(white_jail_pop), 0, white_jail_pop)) %>% 
     mutate(black_to_white_ratio = black_jail_pop / white_jail_pop) %>%  # Ratio calculation
     filter(is.nan(black_to_white_ratio) == FALSE) # Remove missing calculations
 }
