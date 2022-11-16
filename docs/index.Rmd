@@ -8,6 +8,7 @@ output: html_document
 ```{r echo=FALSE, warning = FALSE, eval = TRUE, message = FALSE}
 source("../source/a4-helpers.R")
 source("../source/analysis.R")
+source("../source/summary.R")
 ```
 
 ## Abstract 
@@ -34,11 +35,12 @@ people of color. As such justice, privacy, and security will come to these
 people as well.
 
 Some questions answered in this report are as follows: <br>
-- 1. How has the U.S. jail population changed from 1978 - 2018 and why?
-- 2. How has the U.S. Jail population changed in the most populous states (CA, NV, FL, NY) and how does this compare with Washington? What might 
+- 1. How has the U.S. jail population changed from 1978 - 2018 and why? <br>
+- 2. How has the U.S. Jail population changed in the most populous states (CA, NV, FL, NY) and how does this compare with Washington? What conclusions can we draw from this? <br>
+- 3. What does a map showing county's ratio of black prisoners to white prisoners reveal about geographic inequalities related to our prison systems?
 
 ## Data Summary 
-[TODO]
+IMPLEMENT
 
 ## Growth of U.S. Prison Population
 ```{r, echo = FALSE, fig.align = "center", fig.width = 10}
@@ -63,4 +65,16 @@ create_inequality_map()
 ```
 _Figure 6_: Comparing the ratio of black jail populations to white jail populations per county in the Southern U.S. For example, a ratio of _6_ indicates that there are 6 black prisoners per every 1 white prisoner. This part of the United States was chosen since it contained ratios that were much greater than other parts of the United States.
 
-On closer observation, this map reveals a potential inequality such that black people seem to be put in prison more than white people. For instance, the greatest ratio can be found in ...
+**Note:** The population variables used in the above figure for the ratios were measured for a singular day and are not a summation for all the prisoners within a timespan such as a year. As such, we can still draw meaningful conclusions from it.
+
+On closer observation, this map reveals a potential inequality such that black people seem to be put in prison more than white people. For instance, the greatest ratios found
+in the Southern U.S. are in Coahoma, MS, Tunica, MS, and Clarendon, SC with the values of 104, 65, and 52 respectively. A more populous prison county, Shelby, TN, with a 3,883 black prison population and a 883 white prison population shows that for about every 4.5 black prisoners there is 1 white prisoner. As such, deep southern states, especially Mississippi and Alabama, seem to have an overwhelming number of black prisoners compared to white prisoners compared to the rest of the Southern U.S. 
+
+It is rather concerning as in the counties listed above, the population breakdown is as follows:
+
+```{r, echo = FALSE, message = FALSE}
+
+knitr::kable(get_southern_populations)
+```
+While the black population outnumbers the white population, it still doesn't explain why the ratio of black prisoners to white prisoners is so high. It questions whether black neighborhoods are being overpoliced by officers in power, or whether these states are issues where blacks are disproportionately taking up prison space since they outnumber the white population.
+

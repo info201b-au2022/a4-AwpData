@@ -88,7 +88,9 @@ plot_jail_pop_by_states <- function(states) {
         title = "Jail Population of Selected States (1970 - 2018)",
         caption = "Source: Vera Institute",
         color = "States"
-      )
+      ) +
+      theme(
+        plot.title = element_text(size = 20, face = "bold"))
     return(plot)
   }
 }
@@ -156,7 +158,7 @@ create_inequality_map <- function() {
       fill = NA,
       color = "black",
       linewidth = 1
-    ) +
+    ) +  
     scale_fill_gradientn( # Scaling the fill with red hue instead of blue
       colors = c("#FFF7EC", "#FEE8C8", "#FDD49E", "#FDBB84", "#FC8D59", "#EF6548",
                  "#D7301F", "#B30000", "#7F0000"),
@@ -174,15 +176,15 @@ create_inequality_map <- function() {
     ) +
     theme_void() + # Removes all axis, backgrounds, tick marks, and grid lines.
     theme(
-      plot.title = element_text(size = 36),
+      plot.title = element_text(size = 36, face = "bold"),
       plot.subtitle = element_text(size = 24),
       plot.caption = element_text(size = 24),
-      legend.position = c(0.55, 0.15), # Change legend position
-      legend.direction = "horizontal", # Make it horizontal
+      legend.title=element_text(size = 24), 
+      legend.text=element_text(size = 18),
       legend.margin = margin(0.2, 0.2, 0.2, 0.2, "cm"), # Add a margin around it
       legend.background = element_rect(fill = "#C6C6C6") # Set the background color for the legend
-      
-    )
+    ) +
+    guides(fill = guide_colorbar(barheight = 20)) # Make the legend bar bigger
   return(plot)
 }
 
