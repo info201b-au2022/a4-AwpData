@@ -16,15 +16,15 @@ Americans found guilty of charges are put through incarceration, but it is possi
 
 ## Introduction 
 This report hopes to highlight social issues related to incarcerating trends. 
-Thus, the data provided showcases the rates and prison populations of people from the binary genders, and of a spectrum of races. Analyzing this dataset might help decriminalize races that might be disproportionately large in the prison system. Many sentences might also be
+Thus, the data provided showcases the rates and jail populations of people from the binary genders, and of a spectrum of races. Analyzing this dataset might help decriminalize races that might be disproportionately large in the jail system. Many sentences might also be
 given for minor offenses. Vera Institute, the provider of this dataset, wants to show that those of color, in poverty, and our unjust prosecution system result in racial disparities in policing and sentencing.
 
 The direct stakeholders are the U.S. Justice system and their corresponding 
 departments and employees as they will be able to visualize the trends of who
-is being incarcerated (perhaps unjustly) into the prison system. Some central 
+is being incarcerated (perhaps unjustly) into the jail system. Some central 
 values that will be engaged by these people are fairness, human dignity, and
 justice. An indirect stakeholder might be communities that are currently facing
-overpolicing. Vera indicates that many prisoners are those police tend to target
+overpolicing. Vera indicates that many people in jail are those police tend to target
 more such as the homeless, people with mental illnesses, substance users, and
 people of color. As such justice, privacy, and security will be values these 
 people will benefit from.
@@ -32,56 +32,73 @@ people will benefit from.
 Some questions answered in this report are as follows: <br>
 - 1. How has the U.S. jail population changed from 1978 - 2018 and why? <br>
 - 2. How has the U.S. Jail population changed in the most populous states (CA, NV, FL, NY) and how does this compare with Washington? What conclusions can we draw from this? <br>
-- 3. What does a map showing county's ratio of black prisoners to white prisoners reveal about geographic inequalities related to our prison systems?
+- 3. Which races are more likely to be put in jail than other races?
+- 4. What does a map showing county's ratio of black to white people in jail reveal about geographic inequalities related to our jail systems?
 
 On top of this, the following data summary also answers the following questions: <br>
 - 1. Which state has the highest average number of black jail population in 2018? <br>
-- 2. Which county has the highest percentage of population that are in prison? <br>
-- 3. What year had the highest Asian American / Pacific Islander (AAPI) prison population and where?
+- 2. Which county has the highest percentage of population that are in jail? <br>
+- 3. What year had the highest Asian American / Pacific Islander (AAPI) jail population and where?
 
 ## Data Summary 
-In order to find inequalities and add support to the calculations in the following sections, several key points were calculated from the incarceration dataset. First, the state with the highest average number of black jail population in 2018 was found to be **Washington D.C.** with that number being **`r highest_avg_black_jail$avg_black_jail`** prisoners. This may be a bit surprising considering how small Washington D.C. is. I went ahead and made a table with the following information about Washington D.C.:
+In order to find inequalities and add support to the calculations in the following sections, several key points were calculated from the incarceration dataset. First, the state with the highest average number of black jail population in 2018 was found to be **Washington D.C.** with that number being **`r highest_avg_black_jail$avg_black_jail`** people in jail. This may be a bit surprising considering how small Washington D.C. is. I went ahead and made a table with the following information about Washington D.C.:
 
 ```{r, echo = FALSE, message = FALSE}
 knitr::kable(DC_information)
 ```
 
-The population of black and white people in Washington D.C. are practically the same proportionally. However, the average white jail population in D.C. is only **`r DC_avg_white_jail`** prisoners. Moreover, the highest average number of white jail population in 2018 was found to be in **Arizona** with **`r highest_avg_white_jail$avg_white_jail`** prisoners. This number is much lower than the highest average for black prison populations.
+The population of black and white people in Washington D.C. are practically the same proportionally. However, the average white jail population in D.C. is only **`r DC_avg_white_jail`** people in jail. Moreover, the highest average number of white jail population in 2018 was found to be in **Arizona** with **`r highest_avg_white_jail$avg_white_jail`** people in jail. This number is much lower than the highest average for black jail populations.
 
-To compare this number with other minority groups, I also wanted to find the location where the highest number of Asian American / Pacific Islander (AAPI) prisoners were held, but this time I did not restrict the year. As such, the result was in **`r year_highest_aapi_pop$year`** in **`r year_highest_aapi_pop$county_name`, `r year_highest_aapi_pop$state`** with only **`r year_highest_aapi_pop$highest_asian_pop`** prisoners. It might be that black neighborhoods are being unfairly enforced, as Asian American communities such as Chinatowns might also have issues with crime but lack of police care for these areas in favor of black communities.
+To compare this number with other minority groups, I also wanted to find the location where the highest number of Asian American / Pacific Islander (AAPI) people in jail were held, but this time I did not restrict the year. As such, the result was in **`r year_highest_aapi_pop$year`** in **`r year_highest_aapi_pop$county_name`, `r year_highest_aapi_pop$state`** with only **`r year_highest_aapi_pop$highest_asian_pop`** people in jail. It might be that black neighborhoods are being unfairly enforced, as Asian American communities such as Chinatowns might also have issues with crime but lack of police care for these areas in favor of black communities.
 
-One more value I wanted to calculate was the county with the highest percentage of prisoners in their population. The result was **`r highest_perc_prisoners$county_name`**, **`r highest_perc_prisoners$state`**, with **`r highest_perc_prisoners$percentage_prisoners`**% of the **`r highest_perc_prisoners$total_pop`** population in jail. This is more of a bonus calculation as I was curious to see which place in the United States had a significantly high amount of their population in prison.
+One more value I wanted to calculate was the county with the highest percentage of people in jail in their population. The result was **`r highest_perc_prisoners$county_name`**, **`r highest_perc_prisoners$state`**, with **`r highest_perc_prisoners$percentage_prisoners`**% of the **`r highest_perc_prisoners$total_pop`** population in jail. This is more of a bonus calculation as I was curious to see which place in the United States had a significantly high amount of their population in jail.
 
-## Growth of U.S. Prison Population
+## Growth of U.S. Jail Population
 ```{r, echo = FALSE, fig.align = "center", fig.width = 10}
 plot_jail_pop_for_us()
 ```
 _Figure 1_: Increase of Jail Population in U.S. (1970 - 2018). This chart shows over time the population of jails has been increasing at a rather steady rate and then seeming to decline from 2008 onwards.
 
-A key pattern in this graph is that while the jail population has been growing steadily, it had been declining since 2008. It might be that laws have been passed that created a more equitable justice system, or that prison reformation has resulted in prisoners being released more than they are being admitted. 
+A key pattern in this graph is that while the jail population has been growing steadily, it had been declining since 2008. It might be that laws have been passed that created a more equitable justice system, or that jail reformation has resulted in those in jail being released more than they are being admitted. 
 
-## Growth of Prison Population By State
+## Growth of Jail Population By State
 
 ```{r, echo = FALSE, fig.align = "center", fig.width = 10}
 plot_jail_pop_by_states(c("CA", "NY", "TX", "FL", "GA", "WA"))
 ```
 _Figure 2_: Increase of Jail Population of Certain States in the U.S. (1970 - 2018). States were chosen by most populous, and then Washington was included for comparison (and because this is for INFO 201 at the University of Washington). It is similar to Figure 1, but instead of having jail populations of the nation over time it is of a respective state instead.
 
-A key pattern identified in this graph is how California has the highest jail population rate while Washington has the lowest. This might be because California is the most populated state or in general has more criminal activity. Another pattern is that all of these states have declining population rates around 2010. This is similar to _figure 1_ and might be based off the results of better prison reformation. 
+A key pattern identified in this graph is how California has the highest jail population rate while Washington has the lowest. This might be because California is the most populated state or in general has more criminal activity. Another pattern is that all of these states have declining population rates around 2010. This is similar to _figure 1_ and might be based off the results of better jail reformation. 
 
-## <Variable Comparison That Reveals Potential Patterns of Inequality>
-[TODO]
+## Comparing The Percent of Black/Latinx/White Populations That Are in Jail in Each Division
+```{r, echo = FALSE, message = FALSE, fig.align = "center", fig.width = 20, fig.height = 10}
+create_stacked_bar_graph()
+```
+
+_Figure 3_: Stacked bar graph to compare the percent of Black/Latinx/White populations that are in jail within each division. A key observation is that black people have percents that are significantly higher in all divisions than the other races. Notice that white people have the lowest percent in most of the division.
+
+Before analyzing why black people might take up a larger percentage of jail populations, observe the following table:
+
+```{r, echo = FALSE}
+knitr::kable(get_pop_race)
+```
+_Table 1_: Total black, latinx, and white population per division.
+
+A question related to this graph is whether an inequality exists where some races are in jail more than other races. To answer this question, we can see that black people have a higher percentage of their population in jail that other races. Looking at the table, an inequality exists since the population of black people in each division does not outnumber the population of white people. Therefore, it is possible that black people experiences injustices with our legal system or are common targets for police. 
+
+Another key pattern in this graph is how latinx people have smaller percentages of people in jail compared to black people, even though they are also a minoritized group. In some cases, latinx percentages are even less than white people's. 
+
 
 ## Ratio of Black Jail Populations to White Jail Populations
 ```{r, echo = FALSE, message = FALSE, fig.width = 20, fig.height = 10}
 create_inequality_map()
 ```
-_Figure 6_: Comparing the ratio of black jail populations to white jail populations per county in the Southern U.S. For example, a ratio of _6_ indicates that there are 6 black prisoners per every 1 white prisoner. This part of the United States was chosen since it contained ratios that were much greater than other parts of the United States.
+_Figure 4_: Comparing the ratio of black jail populations to white jail populations per county in the Southern U.S. For example, a ratio of _6_ indicates that there are 6 black jailed per every 1 white jailed. This part of the United States was chosen since it contained ratios that were much greater than other parts of the United States.
 
-**Note:** The population variables used in the above figure for the ratios were measured for a singular day and are not a summation for all the prisoners within a timespan such as a year. As such, we can still draw meaningful conclusions from it.
+**Note:** The population variables used in the above figure for the ratios were measured for a singular day and are not a summation for all the jailed within a timespan such as a year. As such, we can still draw meaningful conclusions from it.
 
-On closer observation, this map reveals a potential inequality such that black people seem to be put in prison more than white people. For instance, the greatest ratios found
-in the Southern U.S. are in Coahoma, MS, Tunica, MS, and Clarendon, SC with the values of 104, 65, and 52 respectively. A more populous prison county, Shelby, TN, with a 3,883 black prison population and a 883 white prison population shows that for about every 4.5 black prisoners there is 1 white prisoner. As such, deep southern states, especially Mississippi and Alabama, seem to have an overwhelming number of black prisoners compared to white prisoners compared to the rest of the Southern U.S. 
+On closer observation, this map reveals a potential inequality such that black people seem to be put in jail more than white people. For instance, the greatest ratios found
+in the Southern U.S. are in Coahoma, MS, Tunica, MS, and Clarendon, SC with the values of 104, 65, and 52 respectively. A more populous jail county, Shelby, TN, with a 3,883 black jail population and a 883 white jail population shows that for about every 4.5 black jailed there is 1 white jailed. As such, deep southern states, especially Mississippi and Alabama, seem to have an overwhelming number of blacks jailed compared to whites jailed compared to the rest of the Southern U.S. 
 
 It is rather concerning as in the counties listed above, the population breakdown is as follows:
 
@@ -89,5 +106,5 @@ It is rather concerning as in the counties listed above, the population breakdow
 
 knitr::kable(get_southern_populations)
 ```
-While the black population outnumbers the white population, it still doesn't explain why the ratio of black prisoners to white prisoners is so high. It questions whether black neighborhoods are being overpoliced by officers in power, or whether these states have issues where blacks are disproportionately taking up prison space since they outnumber the white population.
+While the black population outnumbers the white population, it still doesn't explain why the ratio of black to white people in jail is so high. It questions whether black neighborhoods are being overpoliced by officers in power, or whether these states have issues where blacks are disproportionately taking up jail space since they outnumber the white population.
 
