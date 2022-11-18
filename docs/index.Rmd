@@ -70,24 +70,21 @@ _Figure 2_: Increase of Jail Population of Certain States in the U.S. (1970 - 20
 
 A key pattern identified in this graph is how California has the highest jail population rate while Washington has the lowest. This might be because California is the most populated state or in general has more criminal activity. Another pattern is that all of these states have declining population rates around 2010. This is similar to _figure 1_ and might be based off the results of better jail reformation. 
 
-## Comparing The Percent of Black/Latinx/White Populations That Are in Jail in Each Division
-```{r, echo = FALSE, message = FALSE, fig.align = "center", fig.width = 20, fig.height = 10}
-create_stacked_bar_graph()
+## Comparing The Percent of Black And White Populations That Are in Jail in Each Division
+```{r, echo = FALSE, message = FALSE, fig.align = "center", fig.width = 10, fig.height = 6}
+create_scatterplot_graph()
 ```
 
-_Figure 3_: Stacked bar graph to compare the percent of Black/Latinx/White populations that are in jail within each division. A key observation is that black people have percents that are significantly higher in all divisions than the other races. Notice that white people have the lowest percent in most of the division.
+_Figure 3_: Scatterplot to compare the percent of Black and White populations that are in jail within each division. A key observation is that black people have percents that are significantly higher in all divisions than white people. Notice that white people also rarely have above 0.5% of their population in prison.
 
 Before analyzing why black people might take up a larger percentage of jail populations, observe the following table:
 
 ```{r, echo = FALSE}
 knitr::kable(get_pop_race)
 ```
-_Table 1_: Total black, latinx, and white population per division.
+_Table 1_: Total black and white population per division (Ages 15 - 64).
 
 A question related to this graph is whether an inequality exists where some races are in jail more than other races. To answer this question, we can see that black people have a higher percentage of their population in jail that other races. Looking at the table, an inequality exists since the population of black people in each division does not outnumber the population of white people. Therefore, it is possible that black people experiences injustices with our legal system or are common targets for police. 
-
-Another key pattern in this graph is how latinx people have smaller percentages of people in jail compared to black people, even though they are also a minoritized group. In some cases, latinx percentages are even less than white people's. 
-
 
 ## Ratio of Black Jail Populations to White Jail Populations
 ```{r, echo = FALSE, message = FALSE, fig.width = 20, fig.height = 10}
@@ -106,5 +103,7 @@ It is rather concerning as in the counties listed above, the population breakdow
 
 knitr::kable(get_southern_populations)
 ```
+_Table 2_: Depicts the top 3 counties in the Southern U.S. region with the highest ratio of black to white prisoners in 2018, as well as a county in TN that has a high ratio but more equally numbered population of whites and blacks.
+
 While the black population outnumbers the white population, it still doesn't explain why the ratio of black to white people in jail is so high. It questions whether black neighborhoods are being overpoliced by officers in power, or whether these states have issues where blacks are disproportionately taking up jail space since they outnumber the white population.
 

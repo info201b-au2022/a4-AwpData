@@ -118,115 +118,77 @@ plot_jail_pop_by_states <- function(states) {
 #----------------------------------------------------------------------------#
 
 # Get the total black jail population in each division
-get_black_per_division <- incarceration_df %>% 
+get_per_division <- incarceration_df %>% 
   group_by(division) %>% 
   filter(year == 2018) %>% 
-  summarize(across(c(black_jail_pop, black_pop_15to64), sum, na.rm = TRUE)) %>% 
-  mutate(prop_in_jail = black_jail_pop / black_pop_15to64 * 100) %>% 
-  select(division, black_jail_pop, black_pop_15to64, prop_in_jail) %>% 
-  rename("Jail_Population" = "black_jail_pop") %>% 
-  rename("Total_Population" = "black_pop_15to64")
+  summarize(across(c(black_jail_pop, black_pop_15to64, white_jail_pop, white_pop_15to64), sum, na.rm = TRUE)) %>% 
+  mutate(black_prop_in_jail = black_jail_pop / black_pop_15to64 * 100) %>% 
+  mutate(white_prop_in_jail = white_jail_pop / white_pop_15to64 * 100) %>% 
+  select(division, 
+         black_pop_15to64, 
+         white_pop_15to64,
+         black_prop_in_jail,
+         white_prop_in_jail) 
 
-get_black_per_division$Jail_Population <- 
-  trunc(get_black_per_division$Jail_Population) 
+get_per_division$black_pop_15to64 <- 
+  format(get_per_division$black_pop_15to64, big.mark = ",")
 
-get_black_per_division$Jail_Population <- 
-  format(get_black_per_division$Jail_Population, big.mark = ",")
+get_per_division$white_pop_15to64 <- 
+  format(get_per_division$white_pop_15to64, big.mark = ",")
 
-get_black_per_division$Total_Population <- 
-  format(get_black_per_division$Total_Population, big.mark = ",")
+get_per_division$black_prop_in_jail <- 
+  round(get_per_division$black_prop_in_jail, digits = 2)
 
-get_black_per_division$prop_in_jail <- 
-  round(get_black_per_division$prop_in_jail, digits = 2)
+get_per_division$white_prop_in_jail <- 
+  round(get_per_division$white_prop_in_jail, digits = 2)
 
-# Create a grouping for the black population in order to later graph a stacked bar chart
-get_black_per_division$group <- "Black"
+# Function to create a scatterplot for each division showing the respective
+# black/white proportions of each population that are in jail
 
-# Get the total white jail population in each division
-get_white_per_division <- incarceration_df %>% 
-  group_by(division) %>% 
-  filter(year == 2018) %>% 
-  summarize(across(c(white_jail_pop, white_pop_15to64), sum, na.rm = TRUE))  %>% 
-  mutate(prop_in_jail = white_jail_pop / white_pop_15to64 * 100) %>% 
-  select(division, white_jail_pop, white_pop_15to64, prop_in_jail) %>% 
-  rename("Jail_Population" = "white_jail_pop") %>% 
-  rename("Total_Population" = "white_pop_15to64")
-
-get_white_per_division$Jail_Population <- 
-  trunc(get_white_per_division$Jail_Population) 
-
-get_white_per_division$Jail_Population <- 
-  format(get_white_per_division$Jail_Population, big.mark = ",")
-
-get_white_per_division$Total_Population <- 
-  format(get_white_per_division$Total_Population, big.mark = ",")
-
-get_white_per_division$prop_in_jail <- 
-  round(get_white_per_division$prop_in_jail, digits = 2)
-
-get_white_per_division$group <- "White"
-
-# Get the total latinx jail population in each division
-get_latinx_per_division <- incarceration_df %>% 
-  group_by(division) %>% 
-  filter(year == 2018) %>% 
-  summarize(across(c(latinx_jail_pop, latinx_pop_15to64), sum, na.rm = TRUE))  %>% 
-  mutate(prop_in_jail = latinx_jail_pop / latinx_pop_15to64 * 100) %>% 
-  select(division, latinx_jail_pop, latinx_pop_15to64, prop_in_jail) %>% 
-  rename("Jail_Population" = "latinx_jail_pop") %>% 
-  rename("Total_Population" = "latinx_pop_15to64")
-
-get_latinx_per_division$Jail_Population <- 
-  trunc(get_latinx_per_division$Jail_Population) 
-
-get_latinx_per_division$Jail_Population <- 
-  format(get_latinx_per_division$Jail_Population, big.mark = ",")
-
-get_latinx_per_division$Total_Population <- 
-  format(get_latinx_per_division$Total_Population, big.mark = ",")
-
-get_latinx_per_division$prop_in_jail <- 
-  round(get_latinx_per_division$prop_in_jail, digits = 2)
-
-get_latinx_per_division$group <- "Latinx"
-
-# Function to create a stacked bar chart for each division showing the respective
-# black/white/latinx proportions of each population that are in jail
-
-# Combine the above datasets into one so we can create a stacked bar char of them
-get_per_division <- bind_rows(get_black_per_division, get_white_per_division, get_latinx_per_division)
-
-create_stacked_bar_graph <- function() {
-  options(repr.plot.width = 9, repr.plot.height = 9)
-  plot <- ggplot(data = get_per_division, aes(x = division, y = prop_in_jail, fill = group)) +
-    geom_bar(stat = "identity") +
-    scale_fill_manual(values = c("#0050d1", "#49d936", "#d93636")) +
-    guides(fill = guide_legend(title = "Race")) +
+create_scatterplot_graph <- function() {
+  # options(repr.plot.width = 9, repr.plot.height = 9)
+  plot <- ggplot(
+    data = get_per_division, 
+    aes(x = white_prop_in_jail, 
+        y = black_prop_in_jail,
+        color = division,
+        text = paste("White Percentage:", white_prop_in_jail, "%",
+                     "\nBlack Percentage:", black_prop_in_jail, "%",
+                     "\nDivision:", division))) +
+    geom_point(
+      data = get_per_division,
+      size = 5,
+    ) +
+    scale_y_continuous(labels = function(x) paste0(x, "%")) +
+    scale_x_continuous(labels = function(x) paste0(x, "%")) +
     labs(
-      title = "Percentage of Race Populations That Are in Jail in Each Division of the U.S.; 2018",
+      title = "Percentage of Black/White Populations That Are in Jail in Each Division of the U.S.; 2018",
       caption = "Source: Vera Institute",
-      x = "Division",
-      y = "Percentage of Population in Jail"
+      x = "Percentage of White in Jail",
+      y = "Percentage of Black in Jail",
+      color = "Division"
     ) + 
     theme(
-      plot.title = element_text(size = 24, face = "bold", vjust = 3),
+      plot.title = element_text(size = 20, face = "bold", vjust = 3),
       plot.caption = element_text(size = 16),
       legend.title=element_text(size = 20, face = "bold"), 
       legend.text=element_text(size = 18),
       legend.margin = margin(0.2, 0.2, 0.2, 0.2, "cm"),
       axis.title.x = element_text(size = 20, face = "bold", vjust = -2),
-      axis.title.y = element_text(size = 20, face = "bold", vjust = 4),
+      axis.title.y = element_text(size = 20, face = "bold", vjust = 5),
       axis.text.x = element_text(size = 15.5),
       axis.text.y = element_text(size = 18),
       plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm")
     ) 
+  plot <- ggplotly(plot, tooltip = c("text"))
   return(plot)
 }
 
 # Create a table of each race's population in each division
 get_pop_race <- get_per_division %>% 
-  select(division, Total_Population, group) %>% 
-  spread(key = group, value = Total_Population)
+  select(division, black_pop_15to64, white_pop_15to64) %>% 
+  rename("Black Population (15 - 64)" = "black_pop_15to64") %>% 
+  rename("White Population (15 - 64)" = "white_pop_15to64")
 
 ## Section 6  ---- 
 #----------------------------------------------------------------------------#
