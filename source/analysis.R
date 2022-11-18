@@ -9,14 +9,87 @@ incarceration_df <- get_data()
 
 ## Section 2  ---- 
 #----------------------------------------------------------------------------#
-# Your functions and variables might go here ... <todo: update comment>
+# Calculations for the three values in section 2 plus some table code to help
+# explain why some results are what they are
 #----------------------------------------------------------------------------#
+# Section 2, Value 1  : Which state has highest average number of black jail population as of 2018?
+highest_avg_black_jail <- incarceration_df %>% 
+  group_by(state) %>% 
+  filter(year == 2018) %>% 
+  summarize(avg_black_jail = sum(black_jail_pop, na.rm = TRUE) / n()) %>% 
+  select(state, avg_black_jail) %>% 
+  arrange(-avg_black_jail) %>% 
+  head(1)
+
+highest_avg_black_jail$avg_black_jail <- format(highest_avg_black_jail$avg_black_jail, 
+                                                big.mark = ",")
+
+# Supporting calculation to show highest average white jail population in 2018
+highest_avg_white_jail <- incarceration_df %>% 
+  group_by(state) %>% 
+  filter(year == 2018) %>% 
+  summarize(avg_white_jail = sum(white_jail_pop, na.rm = TRUE) / n()) %>% 
+  select(state, avg_white_jail) %>% 
+  arrange(-avg_white_jail) %>% 
+  head(1)
+
+highest_avg_white_jail$avg_white_jail <- format(highest_avg_white_jail$avg_white_jail,
+                                                digits = 3)
+
+# Supporting calculation to find the average white jail population in DC in 2018
+DC_avg_white_jail <- incarceration_df %>% 
+  filter(year == 2018) %>% 
+  filter(state == "DC") %>% 
+  summarize(avg_white_jail = sum(white_jail_pop, na.rm = TRUE) / n()) %>% 
+  arrange(-avg_white_jail)
+
+# Table created to showcase the total population, black population, and white population in D.C. in 2018
+DC_information <- incarceration_df %>% 
+  filter(year == 2018) %>% 
+  filter(state == "DC") %>% 
+  group_by(state) %>% 
+  summarize(across(
+    c(total_pop_15to64, black_pop_15to64, white_pop_15to64), 
+    sum, 
+    na.rm = TRUE)) %>% 
+  select(state, total_pop_15to64, black_pop_15to64, white_pop_15to64) %>% 
+  rename("State" = "state") %>% 
+  rename("Total Population (15 - 64)" = "total_pop_15to64") %>% 
+  rename("Black Population (15 - 64)" = "black_pop_15to64") %>% 
+  rename("White Population (15 - 64)"  = "white_pop_15to64")
+
+DC_information[["Total Population (15 - 64)"]] <- format(DC_information[["Total Population (15 - 64)"]], big.mark = ",")
+DC_information[["Black Population (15 - 64)"]] <- format(DC_information[["Black Population (15 - 64)"]], big.mark = ",")
+DC_information[["White Population (15 - 64)"]] <- format(DC_information[["White Population (15 - 64)"]], big.mark = ",")
+
+# Section 2, Value 2: Which county has the highest percentage of population as prisoners?
+highest_perc_prisoners <- incarceration_df %>% 
+  filter(year == 2018) %>% 
+  group_by(county_name, state) %>% 
+  summarize(across(c(total_pop, total_jail_pop), sum, na.rm = TRUE), .groups = "keep") %>% 
+  mutate(percentage_prisoners = total_jail_pop / total_pop * 100) %>% 
+  select(county_name, state, total_pop, total_jail_pop, percentage_prisoners) %>% 
+  arrange(-percentage_prisoners) %>% 
+  head(1)
+
+highest_perc_prisoners$total_pop <- format(highest_perc_prisoners$total_pop, big.mark = ",")
+highest_perc_prisoners$percentage_prisoners <- format(highest_perc_prisoners$percentage_prisoners, digits = 3)
+
+# Section 2, Value 3: What year(s) had the highest Asian American prison population and where?
+year_highest_aapi_pop <- incarceration_df %>% 
+  group_by(year, county_name, state) %>% 
+  summarize(highest_asian_pop = max(aapi_jail_pop, na.rm = TRUE), .groups = "keep") %>% 
+  filter(is.finite(highest_asian_pop) == TRUE) %>% 
+  select(year, county_name, state, highest_asian_pop) %>% 
+  arrange(-highest_asian_pop) %>% 
+  head(1)
 
 ## Section 3  ---- 
 #----------------------------------------------------------------------------#
 # Growth of the U.S. Prison Population
 # Functions to produce the graph shown in section 3 of index.Rmd
 #----------------------------------------------------------------------------#
+
 # This function will return a data frame that will be visualized in the below
 # function plot_jail_pop_for_us()
 get_year_jail_pop <- function() {
@@ -66,11 +139,16 @@ plot_jail_pop_for_us <- function()  {
 # Growth of Prison Population by State 
 # Functions to produce line graph of jail population in different states
 #----------------------------------------------------------------------------#
+
+# Function that retrieves jail populations for the given states in the states
+# vector. 
 get_jail_pop_by_states <- function(states) {
+  # Initial check to make sure the required number of states for analysis is in range
   if (length(states) > 10 || length(states) < 3) {
     print("Error: State vector must have between 3 and 10 states")
     return()
   } else {
+    # If number of states good, then filter by those states and sum the jail pop.
     state_jail_pop <- incarceration_df %>% 
       filter(state %in% states) %>% 
       group_by(state, year) %>% 
@@ -79,6 +157,7 @@ get_jail_pop_by_states <- function(states) {
   }
 }
 
+# Function that plots line graphs for the given states in the states vector
 plot_jail_pop_by_states <- function(states) {
   jail_pop <- get_jail_pop_by_states(states)
   if (is.data.frame(jail_pop)) {
@@ -110,7 +189,6 @@ plot_jail_pop_by_states <- function(states) {
   }
 }
 
-
 ## Section 5  ---- 
 #----------------------------------------------------------------------------#
 # Create a stacked bar chart showing per division the percentage of each race
@@ -130,6 +208,7 @@ get_per_division <- incarceration_df %>%
          black_prop_in_jail,
          white_prop_in_jail) 
 
+# Below code formats the results usch as adding commas and rounding percents
 get_per_division$black_pop_15to64 <- 
   format(get_per_division$black_pop_15to64, big.mark = ",")
 
@@ -144,7 +223,6 @@ get_per_division$white_prop_in_jail <-
 
 # Function to create a scatterplot for each division showing the respective
 # black/white proportions of each population that are in jail
-
 create_scatterplot_graph <- function() {
   # options(repr.plot.width = 9, repr.plot.height = 9)
   plot <- ggplot(
@@ -184,7 +262,8 @@ create_scatterplot_graph <- function() {
   return(plot)
 }
 
-# Create a table of each race's population in each division
+# Create a table of each race's population in each division to show below
+# the above graph
 get_pop_race <- get_per_division %>% 
   select(division, black_pop_15to64, white_pop_15to64) %>% 
   rename("Black Population (15 - 64)" = "black_pop_15to64") %>% 
@@ -194,7 +273,6 @@ get_pop_race <- get_per_division %>%
 #----------------------------------------------------------------------------#
 # Section 6 contains the code used to produce the map to address inequalities
 # between white and black jail populations
-# 
 #----------------------------------------------------------------------------#
 
 # The county names in the incarceration dataset are not formatted the same as
@@ -218,6 +296,7 @@ get_data <- function() {
     mutate(white_jail_pop = ifelse(is.na(white_jail_pop), 0, white_jail_pop)) %>% 
     mutate(black_to_white_ratio = black_jail_pop / white_jail_pop) %>%  # Ratio calculation
     filter(is.nan(black_to_white_ratio) == FALSE) # Remove missing calculations
+  return(data)
 }
 
 # Function used to create the map to show an inequality
@@ -234,12 +313,12 @@ create_inequality_map <- function() {
     inner_join(get_data(), by = c("region" = "State"))
   
   plot <- ggplot(county_shape) +
-    geom_polygon( # Key element that fills in each county with gradient color
+    geom_polygon( # Polygons that represent each county
       mapping = aes(x = long, y = lat, group = group, fill = black_to_white_ratio),
       color = "black",
       linewidth = 0.3
     ) +
-    geom_polygon( # Element used to outline the borders of each state
+    geom_polygon( # Polygons used to outline the borders of each state (no fill)
       data = state_shape,
       mapping = aes(x = long, y = lat, group = group),
       fill = NA,
@@ -250,9 +329,9 @@ create_inequality_map <- function() {
       colors = c("#FFF7EC", "#FEE8C8", "#FDD49E", "#FDBB84", "#FC8D59", "#EF6548",
                  "#D7301F", "#B30000", "#7F0000"),
       # Rescale the colors so it more closely matches the calculated results
-      values = scales::rescale(c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 
-                                 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20,
-                                 30, 40, 50, 60, 100))
+      values = scales::rescale(c(0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 
+                                 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20,
+                                 30, 40, 50, 60, 70, 80, 90, 100))
     ) +
     coord_quickmap() +
     labs(
