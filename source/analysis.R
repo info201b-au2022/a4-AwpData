@@ -162,20 +162,20 @@ create_scatterplot_graph <- function() {
     scale_y_continuous(labels = function(x) paste0(x, "%")) +
     scale_x_continuous(labels = function(x) paste0(x, "%")) +
     labs(
-      title = "Percentage of Black/White Populations That Are in Jail in Each Division of the U.S.; 2018",
+      title = "Percentage of Black/White Populations in Jail in Each U.S. Division; 2018",
       caption = "Source: Vera Institute",
       x = "Percentage of White in Jail",
       y = "Percentage of Black in Jail",
       color = "Division"
     ) + 
     theme(
-      plot.title = element_text(size = 20, face = "bold", vjust = 3),
-      plot.caption = element_text(size = 16),
-      legend.title=element_text(size = 20, face = "bold"), 
-      legend.text=element_text(size = 18),
+      plot.title = element_text(size = 14, face = "bold", vjust = 3),
+      plot.caption = element_text(size = 12),
+      legend.title=element_text(size = 16, face = "bold"), 
+      legend.text=element_text(size = 14),
       legend.margin = margin(0.2, 0.2, 0.2, 0.2, "cm"),
-      axis.title.x = element_text(size = 20, face = "bold", vjust = -2),
-      axis.title.y = element_text(size = 20, face = "bold", vjust = 5),
+      axis.title.x = element_text(size = 14, face = "bold", vjust = -2),
+      axis.title.y = element_text(size = 14, face = "bold", vjust = 5),
       axis.text.x = element_text(size = 15.5),
       axis.text.y = element_text(size = 18),
       plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "cm")
