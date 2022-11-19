@@ -25,14 +25,14 @@ values that will be engaged by these people are fairness, human dignity, and
 justice. An indirect stakeholder might be communities that are currently facing
 overpolicing. Vera indicates that many people in jail are those police tend to target
 more such as the homeless, people with mental illnesses, substance users, and
-people of color. As such justice, privacy, and security will be values these 
+people of color. As such, justice, privacy, and security will be values these 
 people will benefit from.
 
 Some questions answered in this report are as follows: <br>
 - 1. How has the U.S. jail population changed from 1978 - 2018 and why? <br>
-- 2. How has the U.S. Jail population changed in the most populous states (CA, NV, FL, NY) and how does this compare with Washington? What conclusions can we draw from this? <br>
-- 3. Which races are more likely to be put in jail than other races?
-- 4. What does a map showing county's ratio of black to white people in jail reveal about geographic inequalities related to our jail systems?
+- 2. How has the U.S. jail population changed in the most populous states (CA, NV, FL, NY) and how does this compare with Washington? What conclusions can we draw from this? <br>
+- 3. Which races are more likely to be put in jail than other races? <br>
+- 4. What does a U.S. county map showing the ratio of black to white people in jail reveal about geographic inequalities related to our jail systems?
 
 On top of this, the following data summary also answers the following questions: <br>
 - 1. Which state has the highest average number of black jail population in 2018? <br>
@@ -58,7 +58,7 @@ plot_jail_pop_for_us()
 ```
 _Figure 1_: Increase of Jail Population in U.S. (1970 - 2018). This chart shows over time the population of jails has been increasing at a rather steady rate and then seeming to decline from 2008 onwards.
 
-A key pattern in this graph is that while the jail population has been growing steadily, it had been declining since 2008. It might be that laws have been passed that created a more equitable justice system, or that jail reformation has resulted in those in jail being released more than they are being admitted. 
+A key pattern in this graph is that while the jail population has been growing steadily, it had been declining since 2008. It might be that laws have been passed that created a more equitable justice system, or that jail reformation has resulted in those in jail being released more than they are being admitted. The increase in jail population overall might be from an overall increase in U.S. population, or rather an increase in crime rates.
 
 ## Growth of Jail Population By State
 
@@ -89,11 +89,11 @@ A question related to this graph is whether an inequality exists where some race
 ```{r, echo = FALSE, message = FALSE, fig.width = 20, fig.height = 10}
 create_inequality_map()
 ```
-_Figure 4_: Comparing the ratio of black jail populations to white jail populations per county in the Southern U.S. For example, a ratio of _6_ indicates that there are 6 black jailed per every 1 white jailed. This part of the United States was chosen since it contained ratios that were much greater than other parts of the United States.
+_Figure 4_: Comparing the ratio of black jail populations to white jail populations per county in the Southern U.S. For example, a ratio of 6 indicates that there are 6 black jailed per every 1 white jailed. This part of the United States was chosen since it contained ratios that were much greater than other parts of the United States.
 
 **Note:** The population variables used in the above figure for the ratios were measured for a singular day and are not a summation for all the jailed within a timespan such as a year. As such, we can still draw meaningful conclusions from it.
 
-On closer observation, this map reveals a potential inequality such that black people seem to be put in jail more than white people. For instance, the greatest ratios found
+One important question this graph answers is whether black and white people are jailed at equal rates. On closer observation, this map reveals a potential inequality such that black people seem to be put in jail more than white people. For instance, the greatest ratios found
 in the Southern U.S. are in Coahoma, MS, Tunica, MS, and Clarendon, SC with the values of 104, 65, and 52 respectively. A more populous jail county, Shelby, TN, with a 3,883 black jail population and a 883 white jail population shows that for about every 4.5 black jailed there is 1 white jailed. As such, deep southern states, especially Mississippi and Alabama, seem to have an overwhelming number of blacks jailed compared to whites jailed compared to the rest of the Southern U.S. 
 
 It is rather concerning as in the counties listed above, the population breakdown is as follows:
