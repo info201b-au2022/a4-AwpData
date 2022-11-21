@@ -242,8 +242,8 @@ create_scatterplot_graph <- function() {
     labs(
       title = "Percentage of Black/White Populations in Jail in Each U.S. Division; 2018",
       caption = "Source: Vera Institute",
-      x = "Percentage of White in Jail",
-      y = "Percentage of Black in Jail",
+      x = "Percentage of White People in Jail",
+      y = "Percentage of Black People in Jail",
       color = "Division"
     ) + 
     theme(
