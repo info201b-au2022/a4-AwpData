@@ -1,5 +1,5 @@
 ---
-title: "Incarceration Trends in the U.S. 1970 - 2018"
+title: "Incarceration Trends Reveal Inequalities In The U.S."
 author: "Trevor Tang"
 date: '2022-11-21'
 output: html_document
@@ -56,7 +56,7 @@ One more value I wanted to calculate was the county with the highest percentage 
 ```{r, echo = FALSE, fig.align = "center", fig.width = 10}
 plot_jail_pop_for_us()
 ```
-_Figure 1_: Increase of Jail Population in U.S. (1970 - 2018). This chart shows over time the population of jails has been increasing at a rather steady rate and then seeming to decline from 2008 onwards.
+_Figure 1_: Increase of Jail Population in U.S. (1970 - 2018). This chart shows over time the population of jails has been increasing at a rather steady rate and then seeming to decline from 2008 onwards.**Hover over the graph to see more info**
 
 A key pattern in this graph is that while the jail population has been growing steadily, it had been declining since 2008. It might be that laws have been passed that created a more equitable justice system, or that jail reformation has resulted in those in jail being released more than they are being admitted. The increase in jail population overall might be from an overall increase in U.S. population, or rather an increase in crime rates.
 
@@ -74,7 +74,7 @@ A key pattern identified in this graph is how California has the highest jail po
 create_scatterplot_graph()
 ```
 
-_Figure 3_: Scatterplot to compare the percent of Black and White populations that are in jail within each division. A key observation is that black people have percents that are significantly higher in all divisions than white people. Notice that white people also rarely have above 0.5% of their population in prison.
+_Figure 3_: Scatterplot to compare the percent of Black and White populations that are in jail within each division. A key observation is that black people have percents that are significantly higher in all divisions than white people. Notice that white people also rarely have above 0.5% of their population in prison. **Hover over the graph to see more info**
 
 Before analyzing why black people might take up a larger percentage of jail populations, observe the following table:
 
@@ -91,7 +91,7 @@ create_inequality_map()
 ```
 _Figure 4_: Comparing the ratio of black jail populations to white jail populations per county in the Southern U.S. For example, a ratio of 6 indicates that there are 6 black jailed per every 1 white jailed. This part of the United States was chosen since it contained ratios that were much greater than other parts of the United States.
 
-**Note:** The population variables used in the above figure for the ratios were measured for a singular day and are not a summation for all the jailed within a timespan such as a year. As such, we can still draw meaningful conclusions from it.
+**Note:** The population variables used in the above figure for the ratios were measured for a singular day and are not a summation for all the jailed within a time span such as a year. As such, we can still draw meaningful conclusions from it.
 
 One important question this graph answers is whether black and white people are jailed at equal rates. On closer observation, this map reveals a potential inequality such that black people seem to be put in jail more than white people. For instance, the greatest ratios found
 in the Southern U.S. are in Coahoma, MS, Tunica, MS, and Clarendon, SC with the values of 104, 65, and 52 respectively. A more populous jail county, Shelby, TN, with a 3,883 black jail population and a 883 white jail population shows that for about every 4.5 black jailed there is 1 white jailed. As such, deep southern states, especially Mississippi and Alabama, seem to have an overwhelming number of blacks jailed compared to whites jailed compared to the rest of the Southern U.S. 
@@ -104,5 +104,5 @@ knitr::kable(get_southern_populations)
 ```
 _Table 2_: Depicts the top 3 counties in the Southern U.S. region with the highest ratio of black to white prisoners in 2018, as well as a county in TN that has a high ratio but more equally numbered population of whites and blacks.
 
-While the black population outnumbers the white population, it still doesn't explain why the ratio of black to white people in jail is so high. It questions whether black neighborhoods are being overpoliced by officers in power, or whether these states have issues where blacks are disproportionately taking up jail space since they outnumber the white population.
+While the black population outnumbers the white population, it still doesn't explain why the ratio of black to white people in jail is so high. It questions whether black neighborhoods are being over-policed by officers in power, or whether these states have issues where blacks are disproportionately taking up jail space since they outnumber the white population.
 

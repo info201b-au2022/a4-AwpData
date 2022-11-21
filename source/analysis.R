@@ -1,10 +1,12 @@
 library(tidyverse)
 library(plotly)
 library(maps) # Used in section 6 to match county names for mapping
+library(RColorBrewer) # Used in section 5 to color the scatter plot
 
 # The functions might be useful for A4
 source("../source/a4-helpers.R")
 
+# Load the dataset
 incarceration_df <- get_data()
 
 ## Section 2  ---- 
@@ -113,7 +115,10 @@ get_year_jail_pop <- function() {
 plot_jail_pop_for_us <- function()  {
   # Create a ggplot with the function above as the dataset and x and y variables
   # being the year and total jail population
-  plot <- ggplot(get_year_jail_pop(), aes(x = Year, y = `Total U.S. Jail Population`)) +
+  plot <- ggplot(get_year_jail_pop(), aes(
+    x = Year, 
+    y = `Total U.S. Jail Population`,
+    text = paste("Total U.S. Jail Population:", scales::comma(`Total U.S. Jail Population`)))) +
     # Make it a bar graph (label used for plotly hover info)
     geom_col() +
     # Scale the y so that the labels show comma notation instead of scientific
@@ -130,7 +135,7 @@ plot_jail_pop_for_us <- function()  {
       axis.title.x = element_text(size = 16, face = "bold", vjust = -2),
       axis.title.y = element_text(size = 16, face = "bold", vjust = 4),
     )
-  plot <- ggplotly(plot)
+  plot <- ggplotly(plot, tooltip = c("x", "text"))
   return(plot)   
 } 
 
@@ -230,15 +235,17 @@ create_scatterplot_graph <- function() {
     aes(x = white_prop_in_jail, 
         y = black_prop_in_jail,
         color = division,
-        text = paste("White Percentage:", white_prop_in_jail, "%",
-                     "\nBlack Percentage:", black_prop_in_jail, "%",
-                     "\nDivision:", division))) +
+        text = paste("Division:", division,
+                     "\nWhite Percentage:", white_prop_in_jail, "%",
+                     "\nBlack Percentage:", black_prop_in_jail, "%"
+                     ))) +
     geom_point(
       data = get_per_division,
       size = 5,
     ) +
     scale_y_continuous(labels = function(x) paste0(x, "%")) +
     scale_x_continuous(labels = function(x) paste0(x, "%")) +
+    scale_color_brewer(palette = "Set1") +
     labs(
       title = "Percentage of Black/White Populations in Jail in Each U.S. Division; 2018",
       caption = "Source: Vera Institute",
@@ -267,7 +274,8 @@ create_scatterplot_graph <- function() {
 get_pop_race <- get_per_division %>% 
   select(division, black_pop_15to64, white_pop_15to64) %>% 
   rename("Black Population (15 - 64)" = "black_pop_15to64") %>% 
-  rename("White Population (15 - 64)" = "white_pop_15to64")
+  rename("White Population (15 - 64)" = "white_pop_15to64") %>% 
+  rename("Division" = "division")
 
 ## Section 6  ---- 
 #----------------------------------------------------------------------------#
@@ -354,7 +362,7 @@ create_inequality_map <- function() {
   return(plot)
 }
 
-# For section 6 table (list populations from select population)
+# For section 6 table (list populations from select U.S. South populations)
 get_southern_populations <- incarceration_df %>% 
   filter(state %in% c("TN", "MS", "SC")) %>% 
   filter(year == "2018") %>% 
@@ -366,7 +374,7 @@ get_southern_populations <- incarceration_df %>%
   rename("Black Population (15 - 64)" = "black_pop_15to64") %>% 
   rename("White Population (15 - 64)" = "white_pop_15to64")
 
-
+# Add commas to numbers
 get_southern_populations[["Total Population"]] <- format(get_southern_populations[["Total Population"]], big.mark = ",")
 get_southern_populations[["Black Population (15 - 64)"]] <- format(get_southern_populations[["Black Population (15 - 64)"]], big.mark = ",")
 get_southern_populations[["White Population (15 - 64)"]] <- format(get_southern_populations[["White Population (15 - 64)"]], big.mark = ",")
